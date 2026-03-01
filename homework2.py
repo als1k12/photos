@@ -1,3 +1,62 @@
+import threading
+from telebot import TeleBot
+
+API_TOKEN = "8263397450:AAEG9A_UUCijklkBJLFnvJQ6lA2kdgbtgO4"
+bot = TeleBot(API_TOKEN)
+
+timers = {}
+
+
+def beep(chat_id):
+    bot.send_message(chat_id, "Beep!")
+    if chat_id in timers:
+        sec = timers[chat_id]["sec"]
+        t = threading.Timer(sec, beep, args=[chat_id])
+        timers[chat_id]["timer"] = t
+        t.start()
+
+@bot.message_handler(commands=["start", "help"])
+def start(message):
+    bot.reply_to(message, "Команды:\n/set <сек>\n/unset")
+
+@bot.message_handler(commands=["set"])
+def set_timer(message):
+    args = message.text.split()
+    if len(args) < 2 or not args[1].isdigit():
+        bot.reply_to(message, "Использование: /set <секунды>")
+        return
+
+    sec = int(args[1])
+    if sec <= 0:
+        bot.reply_to(message, "Введи число > 0")
+        return
+
+    chat_id = message.chat.id
+
+    if chat_id in timers:
+        timers[chat_id]["timer"].cancel()
+
+    t = threading.Timer(sec, beep, args=[chat_id])
+    timers[chat_id] = {"timer": t, "sec": sec}
+    t.start()
+
+    bot.reply_to(message, "Таймер каждые {sec} секунд запущен")
+
+@bot.message_handler(commands=["unset"])
+def unset_timer(message):
+    chat_id = message.chat.id
+    if chat_id in timers:
+        timers[chat_id]["timer"].cancel()
+        del timers[chat_id]
+        bot.reply_to(message, "Таймер остановлен")
+    else:
+        bot.reply_to(message, "Нет активных таймеров")
+
+print("Бот запущен")
+bot.infinity_polling()
+
+----------------------------------------------
+
 import time, threading, schedule, telebot
 from telebot import TeleBot
 from logic import flip_coin, gen_emodji
