@@ -3,8 +3,8 @@ from telebot import TeleBot
 import images_memes
 import images_nomemes
 
-token = "8263397450:AAEG9A_UUCijklkBJLFnvJQ6lA2kdgbtgO4"
-bot = telebot.TeleBot("8263397450:AAEG9A_UUCijklkBJLFnvJQ6lA2kdgbtgO4")
+token = "это мой токен"
+bot = telebot.TeleBot("тут тоже")
 
 
 mem_images = ['images_memes/kot.jpg' , 'images_memes/ded.jpg' , 'images_memes/monkey.jpg']
