@@ -1,7 +1,7 @@
 import threading
 from telebot import TeleBot
 
-API_TOKEN = "8263397450:AAEG9A_UUCijklkBJLFnvJQ6lA2kdgbtgO4"
+API_TOKEN = "это мой токен тут"
 bot = TeleBot(API_TOKEN)
 
 timers = {}
